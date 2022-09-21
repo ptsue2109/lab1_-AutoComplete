@@ -1,28 +1,46 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  <template>
+    <div class="app">
+      <InputVal
+        :listArray="cityList"
+      />
+    </div>
+  </template>
+  <script>
+    import InputVal from "./components/InputVal.vue";
+    import axios from "axios";
+    export default {
+      name: "App",
+      components: {
+        InputVal,
+      },
+      data() {
+        return {
+          cityList: [],
+        };
+      },
+      methods: {
+        async fetchCityApi() {
+          try {
+            await axios
+              .get("https://provinces.open-api.vn/api/")
+              .then((res) => (this.cityList = [...res.data]));
+          } catch (e) {
+            console.log("Failed to fetch data");
+          }
+        },
+      },
+      created() {
+        this.fetchCityApi();
+      },
+    };
+    </script>
+  <style lang="scss">
+  * {
+    margin: 0;
+    box-sizing: border-box;
   }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  .app {
+    margin-top: 140px;
+    text-align: center;
+  }
+  </style>
